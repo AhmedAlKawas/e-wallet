@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BBC</string>
+    <string name="choose_role">Please choose your role in which you want to login</string>
+    <string name="customer">Costumer</string>
+    <string name="vendor">Vendor</string>
+    <string name="admin">Admin</string>
+    <string name="continue_btn">Continue</string>
+    <string name="enter_your_phone_here">Enter your phone</string>
+    <string name="if_it_is_your_first_login_enter_your_name">If it is your first login enter your name</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="total_credit">Total credit</string>
+    <string name="costumer_clue">CR</string>
+    <string name="vendor_clue">VR</string>
+    <string name="admin_clue">AN</string>
+    <string name="user_not_available">Sorry the QR Code you just scanned doesnt belong to any of our users</string>
+    <string name="pref_name">pREFRENCE</string>
+</resources>

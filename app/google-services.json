@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "679976825979",
+    "firebase_url": "https://byebyecash-f394e.firebaseio.com",
+    "project_id": "byebyecash-f394e",
+    "storage_bucket": "byebyecash-f394e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679976825979:android:c92579818cec25d4",
+        "android_client_info": {
+          "package_name": "com.example.pc.byebyecash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679976825979-kmqhe0ntvih06ccl048jm2isle9huqus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pc.byebyecash",
+            "certificate_hash": "7d4a2f2cee7adab3957ca4d8a0c6ea18787cb3d5"
+          }
+        },
+        {
+          "client_id": "679976825979-ekg9tpofvofa1lq1kvsndldn8qnv6d2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8AifkzWRPqBmzGUx_3mt0P9lfST3plxY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679976825979-ekg9tpofvofa1lq1kvsndldn8qnv6d2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
