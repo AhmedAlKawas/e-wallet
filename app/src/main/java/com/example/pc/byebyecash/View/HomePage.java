@@ -45,7 +45,7 @@ public class HomePage extends AppCompatActivity {
     DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence;
     EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
     Encrypytion encrypytion;
-    Dialog addVendorDialog , sendindDialog;;
+    Dialog addVendorDialog , sendindDialog , recievingDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     float currentBalance , creditAmmount;
@@ -93,11 +93,11 @@ public class HomePage extends AppCompatActivity {
         recieveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new Dialog(HomePage.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(true);
-                dialog.setContentView(R.layout.dialog_qr_code_view);
-                ImageView qrCodeView = dialog.findViewById(R.id.qr_code_img);
+                recievingDialog = new Dialog(HomePage.this);
+                recievingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                recievingDialog.setCancelable(true);
+                recievingDialog.setContentView(R.layout.dialog_qr_code_view);
+                ImageView qrCodeView = recievingDialog.findViewById(R.id.qr_code_img);
                 try {
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.encodeBitmap(roleClue+mobile,
@@ -106,7 +106,7 @@ public class HomePage extends AppCompatActivity {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                dialog.show();
+                recievingDialog.show();
             }
         });
 
