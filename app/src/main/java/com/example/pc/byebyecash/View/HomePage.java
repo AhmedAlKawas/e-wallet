@@ -280,9 +280,12 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 creditAmmount = Float.valueOf(ammountET.getText().toString());
                 if (!ammountET.getText().toString().isEmpty()){
+                    if (creditAmmount!=0) {
 
-                    checkUserBalance();
+                        checkUserBalance();
 
+                    }else
+                        ammountET.setError(getString(R.string.specify_amount));
                 }else
                     ammountET.setError(getString(R.string.specify_amount));
             }
