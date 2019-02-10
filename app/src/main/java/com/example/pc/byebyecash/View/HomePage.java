@@ -152,7 +152,6 @@ public class HomePage extends AppCompatActivity {
             });
         } else if (role.equals(getString(R.string.admin))) {
             addVendorBtn.setVisibility(View.VISIBLE);
-            recieveBtn.setVisibility(View.GONE);
             documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
