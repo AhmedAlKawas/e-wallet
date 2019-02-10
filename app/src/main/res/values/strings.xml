@@ -14,4 +14,6 @@
     <string name="admin_clue">AN</string>
     <string name="user_not_available">Sorry the QR Code you just scanned doesnt belong to any of our users</string>
     <string name="pref_name">pREFRENCE</string>
+    <string name="specify_amount">Please specify the amount of credit you want to send</string>
+    <string name="balance_not_enough">Your balance is not enough</string>
 </resources>

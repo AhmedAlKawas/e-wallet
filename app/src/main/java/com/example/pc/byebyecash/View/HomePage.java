@@ -36,7 +36,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile;
+    String mobile, role , totalCredit , roleClue ,recieverMobile ;
     TextView userNameTv, tokensTv , logOutTv;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
@@ -47,6 +47,8 @@ public class HomePage extends AppCompatActivity {
     Dialog addVendorDialog , sendindDialog;;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
+    float currentBalance , creditAmmount;
+    EditText ammountET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,19 +273,56 @@ public class HomePage extends AppCompatActivity {
         sendindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sendindDialog.setCancelable(true);
         sendindDialog.setContentView(R.layout.dialog_send_credit);
-        final EditText ammountET = sendindDialog.findViewById(R.id.ammount_et);
+        ammountET = sendindDialog.findViewById(R.id.ammount_et);
         Button sendCreditBTN = sendindDialog.findViewById(R.id.send_credit_btn);
         sendCreditBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String creditAmmount = ammountET.getText().toString();
-                if (!creditAmmount.isEmpty()){
-                    
+                creditAmmount = Float.valueOf(ammountET.getText().toString());
+                if (!ammountET.getText().toString().isEmpty()){
+
+                    checkUserBalance();
+
                 }else
-                    ammountET.setError("Please specify the ammount of credit you want to send");
+                    ammountET.setError(getString(R.string.specify_amount));
             }
         });
         sendindDialog.show();
+    }
+
+    private void checkUserBalance(){
+
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()){
+                    if(role.equals(getString(R.string.customer))){
+
+                        Costumer costumer = documentSnapshot.toObject(Costumer.class);
+                        currentBalance = Float.valueOf(costumer.getCredit());
+                        if (currentBalance>=creditAmmount){
+
+                        }else
+                            Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
+                                    ,Toast.LENGTH_SHORT).show();
+
+                    } else if (role.equals(getString(R.string.vendor))) {
+
+                        Vendor vendor = documentSnapshot.toObject(Vendor.class);
+                        currentBalance = Float.valueOf(vendor.getCredit());
+                        if (currentBalance>=creditAmmount){
+
+                        }else
+                            Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
+                                    ,Toast.LENGTH_SHORT).show();
+
+                    } else if (role.equals(getString(R.string.admin))) {
+
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
