@@ -252,7 +252,15 @@ public class HomePage extends AppCompatActivity {
 
         }else if (roleClue.equals(getString(R.string.vendor_clue))){
 
+            reciverRefrence = firebaseFirestore.collection(getString(R.string.vendor))
+                    .document(recieverMobile).collection("Requests").document(mobile);
+            createSendingDialog();
+
         }else if (roleClue.equals(getString(R.string.admin_clue))){
+
+            reciverRefrence = firebaseFirestore.collection(getString(R.string.admin))
+                    .document(recieverMobile).collection("Requests").document(mobile);
+            createSendingDialog();
 
         }else
             Toast.makeText(HomePage.this, R.string.user_not_available,Toast.LENGTH_LONG).show();
