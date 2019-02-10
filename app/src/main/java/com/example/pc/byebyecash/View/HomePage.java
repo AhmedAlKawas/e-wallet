@@ -307,6 +307,13 @@ public class HomePage extends AppCompatActivity {
                         currentBalance = Float.valueOf(costumer.getCredit());
                         if (currentBalance>=creditAmmount){
 
+                            Request request = new Request(creditAmmount,"NO");
+                            senderRefrence = firebaseFirestore.collection(getString(R.string.vendor))
+                                    .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
+                            senderRefrence.set(request);
+                            reciverRefrence.set(request);
+                            sendindDialog.dismiss();
+
                         }else
                             Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
                                     ,Toast.LENGTH_SHORT).show();
@@ -316,6 +323,13 @@ public class HomePage extends AppCompatActivity {
                         Vendor vendor = documentSnapshot.toObject(Vendor.class);
                         currentBalance = Float.valueOf(vendor.getCredit());
                         if (currentBalance>=creditAmmount){
+
+                            Request request = new Request(creditAmmount,"NO");
+                            senderRefrence = firebaseFirestore.collection(getString(R.string.vendor))
+                                    .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
+                            senderRefrence.set(request);
+                            reciverRefrence.set(request);
+                            sendindDialog.dismiss();
 
                         }else
                             Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
