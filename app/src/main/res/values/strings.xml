@@ -16,4 +16,5 @@
     <string name="pref_name">pREFRENCE</string>
     <string name="specify_amount">Please specify the amount of credit you want to send</string>
     <string name="balance_not_enough">Your balance is not enough</string>
+    <string name="requests">Requests</string>
 </resources>

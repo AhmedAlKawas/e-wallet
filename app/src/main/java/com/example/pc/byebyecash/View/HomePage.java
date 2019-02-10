@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.pc.byebyecash.MainActivity;
 import com.example.pc.byebyecash.Model.Admin;
 import com.example.pc.byebyecash.Model.Costumer;
+import com.example.pc.byebyecash.Model.Request;
 import com.example.pc.byebyecash.Model.Vendor;
 import com.example.pc.byebyecash.R;
 import com.example.pc.byebyecash.utils.Encrypytion;
@@ -41,7 +42,7 @@ public class HomePage extends AppCompatActivity {
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    DocumentReference documentReference, totalCreditRefrence , reciverRefrence;
+    DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence;
     EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
     Encrypytion encrypytion;
     Dialog addVendorDialog , sendindDialog;;
@@ -63,9 +64,10 @@ public class HomePage extends AppCompatActivity {
         logOutTv = findViewById(R.id.log_out_tv);
 
         Intent i = getIntent();
+
         mobile = i.getStringExtra("mobile");
         role = i.getStringExtra("role");
-
+        Log.e("xxx",mobile + role);
         documentReference = firebaseFirestore.collection(role).document(mobile);
         totalCreditRefrence = firebaseFirestore.collection(getString(R.string.admin)).
                 document(getString(R.string.total_credit));
@@ -249,19 +251,19 @@ public class HomePage extends AppCompatActivity {
         if (roleClue.equals(getString(R.string.costumer_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.customer))
-                    .document(recieverMobile).collection("Requests").document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
             createSendingDialog();
 
         }else if (roleClue.equals(getString(R.string.vendor_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.vendor))
-                    .document(recieverMobile).collection("Requests").document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
             createSendingDialog();
 
         }else if (roleClue.equals(getString(R.string.admin_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.admin))
-                    .document(recieverMobile).collection("Requests").document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
             createSendingDialog();
 
         }else
@@ -320,6 +322,13 @@ public class HomePage extends AppCompatActivity {
                                     ,Toast.LENGTH_SHORT).show();
 
                     } else if (role.equals(getString(R.string.admin))) {
+
+                        Request request = new Request(creditAmmount,"NO");
+                        senderRefrence = firebaseFirestore.collection(getString(R.string.admin))
+                                .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
+                        senderRefrence.set(request);
+                        reciverRefrence.set(request);
+                        sendindDialog.dismiss();
 
                     }
                 }
