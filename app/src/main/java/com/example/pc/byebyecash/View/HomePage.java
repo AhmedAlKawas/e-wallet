@@ -37,18 +37,20 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond , requestSenserMobile;
+    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond ,
+            requestSenserMobile ;
     TextView userNameTv, tokensTv , logOutTv , requestAmountET , requestAcceptTV , requestDenyTV;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence;
+    DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence ,
+            requestSenderRefrence;
     EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
     Encrypytion encrypytion;
     Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
-    float currentBalance , creditAmmount;
+    float currentBalance , creditAmmount , requestAmount;
     EditText ammountET ;
     String requestSenderRole , requestStatus;
 
@@ -92,9 +94,11 @@ public class HomePage extends AppCompatActivity {
                     requestSenserMobile = request.getSenderMobile();
                     requestSenderRole = request.getSenderRole();
                     requestStatus = request.getStatus();
+                    requestAmount = request.getCredit();
                     if (status.equals(getString(R.string.reciever))){
                         if (respond.equals(getString(R.string.no))){
-                            createRequestingDialog(requestSenserMobile , requestSenderRole);
+                            createRequestingDialog(requestSenserMobile , requestSenderRole ,
+                                    String.valueOf(requestAmount));
                         }
                     }
                     else if (status.equals(getString(R.string.sender))){
@@ -371,7 +375,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void createRequestingDialog(String mobile , String role){
+    private void createRequestingDialog(final String mobile , final String role , String amount){
 
         requestDialog = new Dialog(HomePage.this);
         requestDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -380,12 +384,16 @@ public class HomePage extends AppCompatActivity {
         requestAmountET = requestDialog.findViewById(R.id.ammount_to_be_sent_tv);
         requestAcceptTV = requestDialog.findViewById(R.id.accept_tv);
         requestDenyTV = requestDialog.findViewById(R.id.decline_tv);
-        requestAmountET.setText(getString(R.string.someone_wants_to_send)+creditAmmount
+        requestAmountET.setText(getString(R.string.someone_wants_to_send)+String.valueOf(amount)
                 +getString(R.string.token));
         requestAcceptTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
+                        .collection(getString(R.string.requests)).document(mobile);
+                Request request = new Request(getString(R.string.yes),getString(R.string.sender));
+                requestSenderRefrence.set(request);
+                requestDialog.dismiss();
             }
         });
         requestDenyTV.setOnClickListener(new View.OnClickListener() {

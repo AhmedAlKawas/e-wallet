@@ -20,6 +20,7 @@
     <string name="sender">Sender</string>
     <string name="reciever">Reciever</string>
     <string name="no">NO</string>
-    <string name="token">token/s</string>
-    <string name="someone_wants_to_send">Someone want\'s to send you</string>
+    <string name="token">\ token/s</string>
+    <string name="someone_wants_to_send">Someone want\'s to send you\ </string>
+    <string name="yes">Yes</string>
 </resources>

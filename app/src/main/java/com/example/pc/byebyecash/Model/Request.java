@@ -16,6 +16,11 @@ public class Request {
         this.status = status;
     }
 
+    public Request(String response, String status) {
+        this.response = response;
+        this.status = status;
+    }
+
     public Request() {
     }
 
