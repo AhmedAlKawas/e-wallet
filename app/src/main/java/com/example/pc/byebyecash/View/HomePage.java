@@ -77,14 +77,14 @@ public class HomePage extends AppCompatActivity {
 
         updateUI();
 
-        senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (documentSnapshot.exists()){
-                    recievingDialog.dismiss();
-                }
-            }
-        });
+//        senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+//                if (documentSnapshot.exists()){
+//                    recievingDialog.dismiss();
+//                }
+//            }
+//        });
 
         addVendorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,8 +318,7 @@ public class HomePage extends AppCompatActivity {
                         currentBalance = Float.valueOf(costumer.getCredit());
                         if (currentBalance>=creditAmmount){
 
-                            Request request = new Request(creditAmmount,"NO");
-                            senderRefrence.set(request);
+                            Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
@@ -333,8 +332,7 @@ public class HomePage extends AppCompatActivity {
                         currentBalance = Float.valueOf(vendor.getCredit());
                         if (currentBalance>=creditAmmount){
 
-                            Request request = new Request(creditAmmount,"NO");
-                            senderRefrence.set(request);
+                            Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
@@ -344,8 +342,7 @@ public class HomePage extends AppCompatActivity {
 
                     } else if (role.equals(getString(R.string.admin))) {
 
-                        Request request = new Request(creditAmmount,"NO");
-                        senderRefrence.set(request);
+                        Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
                         reciverRefrence.set(request);
                         sendindDialog.dismiss();
 

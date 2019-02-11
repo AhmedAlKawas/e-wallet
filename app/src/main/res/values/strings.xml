@@ -17,4 +17,6 @@
     <string name="specify_amount">Please specify the amount of credit you want to send</string>
     <string name="balance_not_enough">Your balance is not enough</string>
     <string name="requests">Requests</string>
+    <string name="sender">Sender</string>
+    <string name="reciever">Reciever</string>
 </resources>
