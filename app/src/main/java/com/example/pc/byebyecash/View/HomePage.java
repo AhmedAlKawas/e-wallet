@@ -67,13 +67,24 @@ public class HomePage extends AppCompatActivity {
 
         mobile = i.getStringExtra("mobile");
         role = i.getStringExtra("role");
-        Log.e("xxx",mobile + role);
         documentReference = firebaseFirestore.collection(role).document(mobile);
         totalCreditRefrence = firebaseFirestore.collection(getString(R.string.admin)).
                 document(getString(R.string.total_credit));
         encrypytion = new Encrypytion();
 
+        senderRefrence = firebaseFirestore.collection(role).document(mobile)
+                .collection(getString(R.string.requests)).document(mobile);
+
         updateUI();
+
+        senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()){
+                    recievingDialog.dismiss();
+                }
+            }
+        });
 
         addVendorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,8 +319,6 @@ public class HomePage extends AppCompatActivity {
                         if (currentBalance>=creditAmmount){
 
                             Request request = new Request(creditAmmount,"NO");
-                            senderRefrence = firebaseFirestore.collection(getString(R.string.vendor))
-                                    .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
                             senderRefrence.set(request);
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
@@ -325,8 +334,6 @@ public class HomePage extends AppCompatActivity {
                         if (currentBalance>=creditAmmount){
 
                             Request request = new Request(creditAmmount,"NO");
-                            senderRefrence = firebaseFirestore.collection(getString(R.string.vendor))
-                                    .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
                             senderRefrence.set(request);
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
@@ -338,8 +345,6 @@ public class HomePage extends AppCompatActivity {
                     } else if (role.equals(getString(R.string.admin))) {
 
                         Request request = new Request(creditAmmount,"NO");
-                        senderRefrence = firebaseFirestore.collection(getString(R.string.admin))
-                                .document(mobile).collection(getString(R.string.requests)).document(recieverMobile);
                         senderRefrence.set(request);
                         reciverRefrence.set(request);
                         sendindDialog.dismiss();
