@@ -37,7 +37,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile ;
+    String mobile, role , totalCredit , roleClue ,recieverMobile , status ;
     TextView userNameTv, tokensTv , logOutTv;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
@@ -77,14 +77,19 @@ public class HomePage extends AppCompatActivity {
 
         updateUI();
 
-//        senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-//                if (documentSnapshot.exists()){
-//                    recievingDialog.dismiss();
-//                }
-//            }
-//        });
+        senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()){
+                    if (recievingDialog!=null){
+                        recievingDialog.dismiss();
+                    }
+                    Request request = documentSnapshot.toObject(Request.class);
+                    status = request.getStatus();
+                    Log.e("status",status);
+                }
+            }
+        });
 
         addVendorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,19 +267,19 @@ public class HomePage extends AppCompatActivity {
         if (roleClue.equals(getString(R.string.costumer_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.customer))
-                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
         }else if (roleClue.equals(getString(R.string.vendor_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.vendor))
-                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
         }else if (roleClue.equals(getString(R.string.admin_clue))){
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.admin))
-                    .document(recieverMobile).collection(getString(R.string.requests)).document(mobile);
+                    .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
         }else
