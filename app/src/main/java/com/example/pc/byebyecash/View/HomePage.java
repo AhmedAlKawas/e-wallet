@@ -102,7 +102,7 @@ public class HomePage extends AppCompatActivity {
                         }
                     }
                     else if (status.equals(getString(R.string.sender))){
-
+                        Log.e("looooo",respond);
                     }
                 }
             }
@@ -399,7 +399,11 @@ public class HomePage extends AppCompatActivity {
         requestDenyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
+                        .collection(getString(R.string.requests)).document(mobile);
+                Request request = new Request(getString(R.string.no),getString(R.string.sender));
+                requestSenderRefrence.set(request);
+                requestDialog.dismiss();
             }
         });
 
