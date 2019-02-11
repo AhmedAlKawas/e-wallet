@@ -37,8 +37,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond;
-    TextView userNameTv, tokensTv , logOutTv;
+    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond , requestSenserMobile;
+    TextView userNameTv, tokensTv , logOutTv , requestAmountET , requestAcceptTV , requestDenyTV;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -49,7 +49,9 @@ public class HomePage extends AppCompatActivity {
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     float currentBalance , creditAmmount;
-    EditText ammountET;
+    EditText ammountET ;
+    String requestSenderRole , requestStatus;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +89,12 @@ public class HomePage extends AppCompatActivity {
                     Request request = documentSnapshot.toObject(Request.class);
                     status = request.getStatus();
                     respond = request.getResponse();
+                    requestSenserMobile = request.getSenderMobile();
+                    requestSenderRole = request.getSenderRole();
+                    requestStatus = request.getStatus();
                     if (status.equals(getString(R.string.reciever))){
                         if (respond.equals(getString(R.string.no))){
-                            createRequestingDialog();
+                            createRequestingDialog(requestSenserMobile , requestSenderRole);
                         }
                     }
                     else if (status.equals(getString(R.string.sender))){
@@ -366,12 +371,29 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void createRequestingDialog(){
+    private void createRequestingDialog(String mobile , String role){
 
         requestDialog = new Dialog(HomePage.this);
         requestDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         requestDialog.setCancelable(true);
         requestDialog.setContentView(R.layout.dialog_request_sending);
+        requestAmountET = requestDialog.findViewById(R.id.ammount_to_be_sent_tv);
+        requestAcceptTV = requestDialog.findViewById(R.id.accept_tv);
+        requestDenyTV = requestDialog.findViewById(R.id.decline_tv);
+        requestAmountET.setText(getString(R.string.someone_wants_to_send)+creditAmmount
+                +getString(R.string.token));
+        requestAcceptTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        requestDenyTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         requestDialog.show();
 
