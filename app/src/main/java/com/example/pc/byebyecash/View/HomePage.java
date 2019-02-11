@@ -37,7 +37,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile , status ;
+    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond;
     TextView userNameTv, tokensTv , logOutTv;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
@@ -45,7 +45,7 @@ public class HomePage extends AppCompatActivity {
     DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence;
     EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
     Encrypytion encrypytion;
-    Dialog addVendorDialog , sendindDialog , recievingDialog;
+    Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     float currentBalance , creditAmmount;
@@ -86,7 +86,15 @@ public class HomePage extends AppCompatActivity {
                     }
                     Request request = documentSnapshot.toObject(Request.class);
                     status = request.getStatus();
-                    Log.e("status",status);
+                    respond = request.getResponse();
+                    if (status.equals(getString(R.string.reciever))){
+                        if (respond.equals(getString(R.string.no))){
+                            createRequestingDialog();
+                        }
+                    }
+                    else if (status.equals(getString(R.string.sender))){
+
+                    }
                 }
             }
         });
@@ -323,7 +331,7 @@ public class HomePage extends AppCompatActivity {
                         currentBalance = Float.valueOf(costumer.getCredit());
                         if (currentBalance>=creditAmmount){
 
-                            Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
+                            Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
@@ -337,7 +345,7 @@ public class HomePage extends AppCompatActivity {
                         currentBalance = Float.valueOf(vendor.getCredit());
                         if (currentBalance>=creditAmmount){
 
-                            Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
+                            Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
@@ -347,7 +355,7 @@ public class HomePage extends AppCompatActivity {
 
                     } else if (role.equals(getString(R.string.admin))) {
 
-                        Request request = new Request(creditAmmount,"NO",mobile,role,getString(R.string.reciever));
+                        Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
                         reciverRefrence.set(request);
                         sendindDialog.dismiss();
 
@@ -355,6 +363,17 @@ public class HomePage extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    private void createRequestingDialog(){
+
+        requestDialog = new Dialog(HomePage.this);
+        requestDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestDialog.setCancelable(true);
+        requestDialog.setContentView(R.layout.dialog_request_sending);
+
+        requestDialog.show();
 
     }
 
