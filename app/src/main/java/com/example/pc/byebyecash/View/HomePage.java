@@ -47,7 +47,7 @@ public class HomePage extends AppCompatActivity {
             requestSenderRefrence;
     EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
     Encrypytion encrypytion;
-    Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog;
+    Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog , respondDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     float currentBalance , creditAmmount , requestAmount;
@@ -424,6 +424,13 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void createRespondDialog(String respond){
+
+        respondDialog = new Dialog(HomePage.this);
+        respondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        respondDialog.setCancelable(true);
+        respondDialog.setContentView(R.layout.dialog_respond);
+
+        respondDialog.show();
 
     }
 
