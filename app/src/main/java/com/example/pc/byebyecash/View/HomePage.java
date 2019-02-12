@@ -102,7 +102,9 @@ public class HomePage extends AppCompatActivity {
                         }
                     }
                     else if (status.equals(getString(R.string.sender))){
-                        Log.e("looooo",respond);
+
+                        createRespondDialog(respond);
+
                     }
                 }
             }
@@ -418,6 +420,10 @@ public class HomePage extends AppCompatActivity {
         });
 
         requestDialog.show();
+
+    }
+
+    private void createRespondDialog(String respond){
 
     }
 
