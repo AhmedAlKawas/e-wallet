@@ -376,7 +376,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void createRequestingDialog(final String mobile, final String role, String amount) {
+    private void createRequestingDialog(final String senderMobile, final String senderRole, final String amount) {
 
         requestDialog = new Dialog(HomePage.this);
         requestDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -390,10 +390,11 @@ public class HomePage extends AppCompatActivity {
         requestAcceptTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
-                        .collection(getString(R.string.requests)).document(mobile);
+                requestSenderRefrence = firebaseFirestore.collection(senderRole).document(senderMobile)
+                        .collection(getString(R.string.requests)).document(senderMobile);
                 Request request = new Request(getString(R.string.yes), getString(R.string.sender));
                 requestSenderRefrence.set(request);
+                performTransformation(senderRole,senderMobile,amount);
                 senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -405,8 +406,8 @@ public class HomePage extends AppCompatActivity {
         requestDenyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
-                        .collection(getString(R.string.requests)).document(mobile);
+                requestSenderRefrence = firebaseFirestore.collection(senderRole).document(senderMobile)
+                        .collection(getString(R.string.requests)).document(senderMobile);
                 Request request = new Request(getString(R.string.no), getString(R.string.sender));
                 requestSenderRefrence.set(request);
                 senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -452,6 +453,12 @@ public class HomePage extends AppCompatActivity {
         });
 
         respondDialog.show();
+
+    }
+
+    private void performTransformation(String senderRole , String senderMobile , String ammount){
+
+
 
     }
 
