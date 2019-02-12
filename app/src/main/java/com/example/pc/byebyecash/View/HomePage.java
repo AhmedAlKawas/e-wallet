@@ -37,22 +37,22 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class HomePage extends AppCompatActivity {
 
-    String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond ,
-            requestSenserMobile , requestSenderRole , requestStatus;
-    TextView userNameTv, tokensTv , logOutTv , requestAmountET , requestAcceptTV , requestDenyTV ,
-            respondTV , respondOkTV;
-    Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
+    String mobile, role, totalCredit, roleClue, recieverMobile, status, respond,
+            requestSenserMobile, requestSenderRole, requestStatus;
+    TextView userNameTv, tokensTv, logOutTv, requestAmountET, requestAcceptTV, requestDenyTV,
+            respondTV, respondOkTV;
+    Button sendBtn, recieveBtn, comfirmVendorBtn, getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence ,
+    DocumentReference documentReference, totalCreditRefrence, reciverRefrence, senderRefrence,
             requestSenderRefrence;
-    EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET ,
+    EditText vendorNameET, vendorMobileET, vendorPasswordET, vendorLatitudeET, vendorLongitudeET,
             ammountET;
     Encrypytion encrypytion;
-    Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog , respondDialog;
+    Dialog addVendorDialog, sendindDialog, recievingDialog, requestDialog, respondDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
-    float currentBalance , creditAmmount , requestAmount;
+    float currentBalance, creditAmmount, requestAmount;
     ImageView respondImgView;
 
     @Override
@@ -84,8 +84,8 @@ public class HomePage extends AppCompatActivity {
         senderRefrence.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (documentSnapshot.exists()){
-                    if (recievingDialog!=null){
+                if (documentSnapshot.exists()) {
+                    if (recievingDialog != null) {
                         recievingDialog.dismiss();
                     }
                     Request request = documentSnapshot.toObject(Request.class);
@@ -95,13 +95,12 @@ public class HomePage extends AppCompatActivity {
                     requestSenderRole = request.getSenderRole();
                     requestStatus = request.getStatus();
                     requestAmount = request.getCredit();
-                    if (status.equals(getString(R.string.reciever))){
-                        if (respond.equals(getString(R.string.no))){
-                            createRequestingDialog(requestSenserMobile , requestSenderRole ,
+                    if (status.equals(getString(R.string.reciever))) {
+                        if (respond.equals(getString(R.string.no))) {
+                            createRequestingDialog(requestSenserMobile, requestSenderRole,
                                     String.valueOf(requestAmount));
                         }
-                    }
-                    else if (status.equals(getString(R.string.sender))){
+                    } else if (status.equals(getString(R.string.sender))) {
 
                         createRespondDialog(respond);
 
@@ -121,7 +120,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 IntentIntegrator i = new IntentIntegrator(HomePage.this);
-                startActivityForResult(i.createScanIntent(),2);
+                startActivityForResult(i.createScanIntent(), 2);
             }
         });
 
@@ -135,10 +134,10 @@ public class HomePage extends AppCompatActivity {
                 ImageView qrCodeView = recievingDialog.findViewById(R.id.qr_code_img);
                 try {
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.encodeBitmap(roleClue+mobile,
+                    Bitmap bitmap = barcodeEncoder.encodeBitmap(roleClue + mobile,
                             BarcodeFormat.QR_CODE, 400, 400);
                     qrCodeView.setImageBitmap(bitmap);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 recievingDialog.show();
@@ -152,7 +151,7 @@ public class HomePage extends AppCompatActivity {
                 editor = settings.edit();
                 editor.clear();
                 editor.commit();
-                startActivity(new Intent(HomePage.this,MainActivity.class));
+                startActivity(new Intent(HomePage.this, MainActivity.class));
             }
         });
 
@@ -214,7 +213,7 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
-    private void addAVendor(){
+    private void addAVendor() {
         addVendorDialog = new Dialog(HomePage.this);
         addVendorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         addVendorDialog.setCancelable(true);
@@ -257,7 +256,7 @@ public class HomePage extends AppCompatActivity {
                         if (!vendorLatitudeStr.isEmpty()) {
                             Vendor vendors = new Vendor(Double.parseDouble(vendorLongitudeStr)
                                     , Double.parseDouble(vendorLatitudeStr), vendorName,
-                                    0, encrypytion.encrypt(vendorPasswordStr) );
+                                    0, encrypytion.encrypt(vendorPasswordStr));
                             DocumentReference documentReference1 = firebaseFirestore
                                     .collection("Vendor").document(vendorMobile);
                             documentReference1.set(vendors);
@@ -266,46 +265,46 @@ public class HomePage extends AppCompatActivity {
                             vendorLongitudeET.setError("Please click on the get vebor button and" +
                                     " select the vendors location so that the longitide and " +
                                     "latitude be self generated");
-                    }else
+                    } else
                         vendorPasswordET.setError("Please enter the vendors Password");
-                }else
+                } else
                     vendorMobileET.setError("Please enter the vendors mobile number");
             }
         });
         addVendorDialog.show();
     }
 
-    private void getLocation(){
-        Intent i = new Intent(HomePage.this,MapsActivity.class);
-        startActivityForResult(i,1);
+    private void getLocation() {
+        Intent i = new Intent(HomePage.this, MapsActivity.class);
+        startActivityForResult(i, 1);
     }
 
-    private void detectRecieverRole(String recieverRole){
-        roleClue = recieverRole.substring(0,2);
+    private void detectRecieverRole(String recieverRole) {
+        roleClue = recieverRole.substring(0, 2);
         recieverMobile = recieverRole.substring(2);
-        if (roleClue.equals(getString(R.string.costumer_clue))){
+        if (roleClue.equals(getString(R.string.costumer_clue))) {
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.customer))
                     .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
-        }else if (roleClue.equals(getString(R.string.vendor_clue))){
+        } else if (roleClue.equals(getString(R.string.vendor_clue))) {
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.vendor))
                     .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
-        }else if (roleClue.equals(getString(R.string.admin_clue))){
+        } else if (roleClue.equals(getString(R.string.admin_clue))) {
 
             reciverRefrence = firebaseFirestore.collection(getString(R.string.admin))
                     .document(recieverMobile).collection(getString(R.string.requests)).document(recieverMobile);
             createSendingDialog();
 
-        }else
-            Toast.makeText(HomePage.this, R.string.user_not_available,Toast.LENGTH_LONG).show();
+        } else
+            Toast.makeText(HomePage.this, R.string.user_not_available, Toast.LENGTH_LONG).show();
     }
 
-    private void createSendingDialog(){
+    private void createSendingDialog() {
         sendindDialog = new Dialog(HomePage.this);
         sendindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sendindDialog.setCancelable(true);
@@ -316,57 +315,57 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 creditAmmount = Float.valueOf(ammountET.getText().toString());
-                if (!ammountET.getText().toString().isEmpty()){
-                    if (creditAmmount!=0) {
+                if (!ammountET.getText().toString().isEmpty()) {
+                    if (creditAmmount != 0) {
 
                         checkUserBalance();
 
-                    }else
+                    } else
                         ammountET.setError(getString(R.string.specify_amount));
-                }else
+                } else
                     ammountET.setError(getString(R.string.specify_amount));
             }
         });
         sendindDialog.show();
     }
 
-    private void checkUserBalance(){
+    private void checkUserBalance() {
 
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (documentSnapshot.exists()){
-                    if(role.equals(getString(R.string.customer))){
+                if (documentSnapshot.exists()) {
+                    if (role.equals(getString(R.string.customer))) {
 
                         Costumer costumer = documentSnapshot.toObject(Costumer.class);
                         currentBalance = Float.valueOf(costumer.getCredit());
-                        if (currentBalance>=creditAmmount){
+                        if (currentBalance >= creditAmmount) {
 
-                            Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
+                            Request request = new Request(creditAmmount, getString(R.string.no), mobile, role, getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
-                        }else
-                            Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
-                                    ,Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(HomePage.this, getString(R.string.balance_not_enough)
+                                    , Toast.LENGTH_SHORT).show();
 
                     } else if (role.equals(getString(R.string.vendor))) {
 
                         Vendor vendor = documentSnapshot.toObject(Vendor.class);
                         currentBalance = Float.valueOf(vendor.getCredit());
-                        if (currentBalance>=creditAmmount){
+                        if (currentBalance >= creditAmmount) {
 
-                            Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
+                            Request request = new Request(creditAmmount, getString(R.string.no), mobile, role, getString(R.string.reciever));
                             reciverRefrence.set(request);
                             sendindDialog.dismiss();
 
-                        }else
-                            Toast.makeText(HomePage.this,getString(R.string.balance_not_enough)
-                                    ,Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(HomePage.this, getString(R.string.balance_not_enough)
+                                    , Toast.LENGTH_SHORT).show();
 
                     } else if (role.equals(getString(R.string.admin))) {
 
-                        Request request = new Request(creditAmmount,getString(R.string.no),mobile,role,getString(R.string.reciever));
+                        Request request = new Request(creditAmmount, getString(R.string.no), mobile, role, getString(R.string.reciever));
                         reciverRefrence.set(request);
                         sendindDialog.dismiss();
 
@@ -377,7 +376,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void createRequestingDialog(final String mobile , final String role , String amount){
+    private void createRequestingDialog(final String mobile, final String role, String amount) {
 
         requestDialog = new Dialog(HomePage.this);
         requestDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -386,14 +385,14 @@ public class HomePage extends AppCompatActivity {
         requestAmountET = requestDialog.findViewById(R.id.ammount_to_be_sent_tv);
         requestAcceptTV = requestDialog.findViewById(R.id.accept_tv);
         requestDenyTV = requestDialog.findViewById(R.id.decline_tv);
-        requestAmountET.setText(getString(R.string.someone_wants_to_send)+String.valueOf(amount)
-                +getString(R.string.token));
+        requestAmountET.setText(getString(R.string.someone_wants_to_send) + String.valueOf(amount)
+                + getString(R.string.token));
         requestAcceptTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
                         .collection(getString(R.string.requests)).document(mobile);
-                Request request = new Request(getString(R.string.yes),getString(R.string.sender));
+                Request request = new Request(getString(R.string.yes), getString(R.string.sender));
                 requestSenderRefrence.set(request);
                 senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -408,7 +407,7 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View view) {
                 requestSenderRefrence = firebaseFirestore.collection(role).document(mobile)
                         .collection(getString(R.string.requests)).document(mobile);
-                Request request = new Request(getString(R.string.no),getString(R.string.sender));
+                Request request = new Request(getString(R.string.no), getString(R.string.sender));
                 requestSenderRefrence.set(request);
                 senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -423,7 +422,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void createRespondDialog(String respond){
+    private void createRespondDialog(String respond) {
 
         respondDialog = new Dialog(HomePage.this);
         respondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -433,12 +432,24 @@ public class HomePage extends AppCompatActivity {
         respondOkTV = respondDialog.findViewById(R.id.ok_tv);
         respondImgView = respondDialog.findViewById(R.id.respond_img);
 
-        if (respond.equals(getString(R.string.no))){
+        if (respond.equals(getString(R.string.no))) {
 
             respondTV.setText(R.string.request_denied);
             respondImgView.setImageResource(R.drawable.ic_sad_colored);
 
         }
+
+        respondOkTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        respondDialog.dismiss();
+                    }
+                });
+            }
+        });
 
         respondDialog.show();
 
@@ -446,23 +457,23 @@ public class HomePage extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1){
-            if (resultCode == RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 vendorLatitudeET.setText(data.getStringExtra("latitude"));
                 vendorLongitudeET.setText(data.getStringExtra("longitude"));
             }
-        }else if (requestCode == 2){
+        } else if (requestCode == 2) {
 
             IntentResult intentResult = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, resultCode, data);
-            if (intentResult != null){
-                if (intentResult.getContents() == null){
-                    Log.e("contents","Canceled");
-                }else{
+            if (intentResult != null) {
+                if (intentResult.getContents() == null) {
+                    Log.e("contents", "Canceled");
+                } else {
                     detectRecieverRole(intentResult.getContents());
                 }
             }
 
-        }else
+        } else
             super.onActivityResult(requestCode, resultCode, data);
     }
 
