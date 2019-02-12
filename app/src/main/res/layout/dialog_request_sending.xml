@@ -26,7 +26,7 @@
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="@id/ammount_to_be_sent_tv"
         app:layout_constraintTop_toBottomOf="@id/ammount_to_be_sent_tv"
-        android:layout_margin="15dp"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
@@ -38,6 +38,6 @@
         android:textSize="17sp"
         app:layout_constraintTop_toTopOf="@id/accept_tv"
         app:layout_constraintEnd_toStartOf="@id/accept_tv"
-        android:layout_marginEnd="15dp" />
+        android:padding="15dp" />
 
 </android.support.constraint.ConstraintLayout>
