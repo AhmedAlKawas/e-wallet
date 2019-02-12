@@ -393,7 +393,12 @@ public class HomePage extends AppCompatActivity {
                         .collection(getString(R.string.requests)).document(mobile);
                 Request request = new Request(getString(R.string.yes),getString(R.string.sender));
                 requestSenderRefrence.set(request);
-                requestDialog.dismiss();
+                senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        requestDialog.dismiss();
+                    }
+                });
             }
         });
         requestDenyTV.setOnClickListener(new View.OnClickListener() {
@@ -403,7 +408,12 @@ public class HomePage extends AppCompatActivity {
                         .collection(getString(R.string.requests)).document(mobile);
                 Request request = new Request(getString(R.string.no),getString(R.string.sender));
                 requestSenderRefrence.set(request);
-                requestDialog.dismiss();
+                senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        requestDialog.dismiss();
+                    }
+                });
             }
         });
 
