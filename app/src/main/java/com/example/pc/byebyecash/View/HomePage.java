@@ -38,22 +38,22 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 public class HomePage extends AppCompatActivity {
 
     String mobile, role , totalCredit , roleClue ,recieverMobile , status , respond ,
-            requestSenserMobile ;
-    TextView userNameTv, tokensTv , logOutTv , requestAmountET , requestAcceptTV , requestDenyTV;
+            requestSenserMobile , requestSenderRole , requestStatus;
+    TextView userNameTv, tokensTv , logOutTv , requestAmountET , requestAcceptTV , requestDenyTV ,
+            respondTV , respondOkTV;
     Button sendBtn, recieveBtn , comfirmVendorBtn , getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     DocumentReference documentReference, totalCreditRefrence , reciverRefrence , senderRefrence ,
             requestSenderRefrence;
-    EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET;
+    EditText vendorNameET , vendorMobileET , vendorPasswordET , vendorLatitudeET , vendorLongitudeET ,
+            ammountET;
     Encrypytion encrypytion;
     Dialog addVendorDialog , sendindDialog , recievingDialog , requestDialog , respondDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     float currentBalance , creditAmmount , requestAmount;
-    EditText ammountET ;
-    String requestSenderRole , requestStatus;
-
+    ImageView respondImgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -429,6 +429,16 @@ public class HomePage extends AppCompatActivity {
         respondDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         respondDialog.setCancelable(true);
         respondDialog.setContentView(R.layout.dialog_respond);
+        respondTV = respondDialog.findViewById(R.id.respond_tv);
+        respondOkTV = respondDialog.findViewById(R.id.ok_tv);
+        respondImgView = respondDialog.findViewById(R.id.respond_img);
+
+        if (respond.equals(getString(R.string.no))){
+
+            respondTV.setText(R.string.request_denied);
+            respondImgView.setImageResource(R.drawable.ic_sad_colored);
+
+        }
 
         respondDialog.show();
 
