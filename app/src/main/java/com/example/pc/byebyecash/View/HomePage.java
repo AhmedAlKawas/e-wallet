@@ -397,9 +397,7 @@ public class HomePage extends AppCompatActivity {
                         .collection(getString(R.string.requests)).document(senderMobile);
                 Request request = new Request(getString(R.string.yes), getString(R.string.sender));
                 requestSenderRefrence.set(request);
-                senderRefrence.delete();
-
-                        performTransformation(senderRole,senderMobile,amount);
+                performTransformation(senderRole,senderMobile,amount);
 
             }
         });
@@ -471,7 +469,20 @@ public class HomePage extends AppCompatActivity {
                 }
             });
 
-            dr = firebaseFirestore.collection(senderRole).document(senderMobile);
+            dr = firebaseFirestore.collection(role).document(mobile);
+            dr.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()){
+                        Costumer costumer = documentSnapshot.toObject(Costumer.class);
+                        currentBalance = Float.valueOf(costumer.getCredit());
+                        balanceAfterTransformation = currentBalance + creditAmmount;
+                        dr.update("credit",Integer.valueOf((int) balanceAfterTransformation));
+                        requestDialog.dismiss();
+                        senderRefrence.delete();
+                    }
+                }
+            });
 
         }else if (senderRole.equals(R.string.vendor)|| senderRole.equals(R.string.customer)){
 
