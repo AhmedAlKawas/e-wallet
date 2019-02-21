@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -38,21 +41,21 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 public class HomePage extends AppCompatActivity {
 
     String mobile, role, totalCredit, roleClue, recieverMobile, status, respond,
-            requestSenserMobile, requestSenderRole, requestStatus;
+            requestSenserMobile, requestSenderRole, requestStatus , systemTotalCredit;
     TextView userNameTv, tokensTv, logOutTv, requestAmountET, requestAcceptTV, requestDenyTV,
             respondTV, respondOkTV;
     Button sendBtn, recieveBtn, comfirmVendorBtn, getLocationBtn;
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     DocumentReference documentReference, totalCreditRefrence, reciverRefrence, senderRefrence,
-            requestSenderRefrence;
+            requestSenderRefrence , dr;
     EditText vendorNameET, vendorMobileET, vendorPasswordET, vendorLatitudeET, vendorLongitudeET,
             ammountET;
     Encrypytion encrypytion;
     Dialog addVendorDialog, sendindDialog, recievingDialog, requestDialog, respondDialog;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
-    float currentBalance, creditAmmount, requestAmount;
+    float currentBalance, creditAmmount, requestAmount , balanceAfterTransformation;
     ImageView respondImgView;
 
     @Override
@@ -394,13 +397,10 @@ public class HomePage extends AppCompatActivity {
                         .collection(getString(R.string.requests)).document(senderMobile);
                 Request request = new Request(getString(R.string.yes), getString(R.string.sender));
                 requestSenderRefrence.set(request);
-                performTransformation(senderRole,senderMobile,amount);
-                senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        requestDialog.dismiss();
-                    }
-                });
+                senderRefrence.delete();
+
+                        performTransformation(senderRole,senderMobile,amount);
+
             }
         });
         requestDenyTV.setOnClickListener(new View.OnClickListener() {
@@ -458,7 +458,30 @@ public class HomePage extends AppCompatActivity {
 
     private void performTransformation(String senderRole , String senderMobile , String ammount){
 
+        creditAmmount = Float.parseFloat(ammount);
 
+        if (senderRole.equals(getString(R.string.admin))){
+
+            totalCreditRefrence.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    systemTotalCredit = documentSnapshot.get(getString(R.string.total_credit)).toString();
+                    balanceAfterTransformation = creditAmmount + Float.valueOf(systemTotalCredit);
+                    totalCreditRefrence.update("Total credit",String.valueOf(balanceAfterTransformation));
+                }
+            });
+
+            dr = firebaseFirestore.collection(senderRole).document(senderMobile);
+
+        }else if (senderRole.equals(R.string.vendor)|| senderRole.equals(R.string.customer)){
+
+            if (role.equals(getString(R.string.admin))){
+
+            }else if (role.equals(R.string.vendor)|| role.equals(R.string.customer)){
+
+            }
+
+        }
 
     }
 
