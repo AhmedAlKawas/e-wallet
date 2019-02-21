@@ -435,7 +435,6 @@ public class HomePage extends AppCompatActivity {
 
             respondTV.setText(R.string.request_denied);
             respondImgView.setImageResource(R.drawable.ic_sad_colored);
-
         }
 
         respondOkTV.setOnClickListener(new View.OnClickListener() {
@@ -444,6 +443,7 @@ public class HomePage extends AppCompatActivity {
                 senderRefrence.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        updateUI();
                         respondDialog.dismiss();
                     }
                 });
