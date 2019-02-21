@@ -48,7 +48,7 @@ public class HomePage extends AppCompatActivity {
     FloatingActionButton addVendorBtn;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     DocumentReference documentReference, totalCreditRefrence, reciverRefrence, senderRefrence,
-            requestSenderRefrence , dr;
+            requestSenderRefrence ;
     EditText vendorNameET, vendorMobileET, vendorPasswordET, vendorLatitudeET, vendorLongitudeET,
             ammountET;
     Encrypytion encrypytion;
@@ -460,6 +460,7 @@ public class HomePage extends AppCompatActivity {
 
         if (senderRole.equals(getString(R.string.admin))){
 
+            //Add to total
             totalCreditRefrence.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -469,15 +470,15 @@ public class HomePage extends AppCompatActivity {
                 }
             });
 
-            dr = firebaseFirestore.collection(role).document(mobile);
-            dr.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            //Add to receiver balance
+            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot.exists()){
                         Costumer costumer = documentSnapshot.toObject(Costumer.class);
                         currentBalance = Float.valueOf(costumer.getCredit());
                         balanceAfterTransformation = currentBalance + creditAmmount;
-                        dr.update("credit",Integer.valueOf((int) balanceAfterTransformation));
+                        documentReference.update("credit",Integer.valueOf((int) balanceAfterTransformation));
                         requestDialog.dismiss();
                         senderRefrence.delete();
                     }
@@ -488,7 +489,21 @@ public class HomePage extends AppCompatActivity {
 
             if (role.equals(getString(R.string.admin))){
 
+                //Sub from sender balance
+
+
+                //Sub from total
+
+
+
             }else if (role.equals(R.string.vendor)|| role.equals(R.string.customer)){
+
+                //Sub from sender balance
+
+
+                //add to reciever balance
+
+
 
             }
 
